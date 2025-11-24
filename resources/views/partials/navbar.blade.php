@@ -1,6 +1,4 @@
-{{-- Kelas 'sticky-header' dihapus agar JS 'app.js' tidak mengontrolnya (tidak menyembunyikannya saat scroll) --}}
-<header class="sticky top-0 left-0 right-0 z-50 p-2 sm:p-4 transition-transform duration-300">
-    <div class="container mx-auto flex justify-between items-center bg-primary/30 backdrop-blur-lg rounded-full text-white p-2 shadow-lg">
+<div class="container mx-auto flex justify-between items-center bg-primary/30 backdrop-blur-lg rounded-full text-white p-2 shadow-lg">
         <a href="{{ route('home') }}" class="flex-shrink-0">
             <img src="{{ asset('gambar/logo_dj.png') }}" alt="Logo D'jamoe" class="h-10 ml-2">
         </a>
