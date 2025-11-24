@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Providers;
+namespace App\Providers; // <--- INI HARUS DI ATAS
 
+use Illuminate\Support\Facades\URL; // <--- PINDAH KE SINI
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
