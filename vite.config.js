@@ -8,4 +8,10 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: '0.0.0.0', // Memaksa Vite mendengarkan di semua network interface
+        hmr: {
+            host: '127.0.0.1', // Memberitahu browser klien untuk konek ke 127.0.0.1
+        }
+    }
 });

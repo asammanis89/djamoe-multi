@@ -1,0 +1,57 @@
+/* 1. Impor Google Fonts (Semua font dalam 1 panggilan) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&family=DM+Serif+Display:wght@400;700&display=swap');
+
+/* 2. Impor Flag Icons (dari node_modules) */
+@import 'flag-icons/css/flag-icons.min.css';
+
+/* 3. Inisialisasi Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 4. Style Global (dari layout dan navbar lama Anda) */
+body { 
+    font-family: 'Inter', sans-serif; 
+    /* 'background-color' dan 'color' sudah diatur oleh Tailwind via tailwind.config.js */
+}
+
+.wa-bubble { 
+    animation: pulse 2.5s infinite cubic-bezier(0.66, 0, 0, 1); 
+}
+
+@keyframes pulse { 
+    0%, 100% { transform: scale(1); } 
+    50% { transform: scale(1.1); } 
+}
+
+.reveal-animation { 
+    opacity: 0; 
+    filter: blur(5px); 
+    transform: translateY(50px) scale(0.98); 
+    transition: opacity 0.8s, transform 0.8s, filter 0.8s; 
+}
+.reveal-animation.is-visible { 
+    opacity: 1; 
+    filter: blur(0); 
+    transform: translateY(0) scale(1); 
+}
+
+.flag-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    object-fit: cover;
+    background-size: cover;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: none;
+}
+
+/* Animasi untuk Mobile Menu (dari navbar) */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slideDown {
+    animation: slideDown 0.3s ease-out;
+}

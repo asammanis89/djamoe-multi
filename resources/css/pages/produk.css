@@ -1,0 +1,40 @@
+.best-seller-tag {
+    position: absolute; top: 1rem; left: -0.5rem; background-color: #E6D793;
+    color: #154424; padding: 0.3rem 1rem; font-size: 0.75rem; font-weight: bold;
+    z-index: 10; border-radius: 0 9999px 9999px 0; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+.category-card img { transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+.category-card:hover img { transform: scale(1.1); }
+.category-card h3 {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    font-family: 'DM Serif Display', serif; /* Font ini harus diimpor di app.css */
+    font-weight: 700;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+    width: 100%;
+    padding: 0 0.5rem;
+}
+#back-to-categories {
+    background-color: #E6D793;
+    color: #154424;
+    font-weight: 600;
+    padding: 0.6rem 1.4rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+#back-to-categories:hover {
+    background-color: #d9c76f;
+    transform: translateY(-2px);
+}
+.loading-spinner {
+    border-color: #E6D793; border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

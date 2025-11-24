@@ -8,6 +8,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Intervention\Image\ImageManagerStatic as Image; // Pastikan baris ini ada
 
 class ProductController extends Controller
 {
@@ -17,15 +19,17 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('category')->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        $categories = Category::orderBy('category_name->id')->get(); 
+
+        return view('admin.products.index', [
+            'products' => $products,
+            'categories' => $categories 
+        ]);
     }
 
-    /**
-     * Form tambah produk baru
-     */
     public function create()
     {
-        $categories = Category::orderBy('category_name')->get();
+        $categories = Category::orderBy('category_name->id')->get();
         return view('admin.products.create', compact('categories'));
     }
 
@@ -35,25 +39,42 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'description'  => 'nullable|string',
-            'category_id'  => 'required|exists:categories,id',
-            'price'        => 'required|numeric|min:0',
-            'image_url'    => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_name' => 'required|array',
+            'product_name.id' => [
+                'required', 'string', 'max:255',
+                Rule::unique('products', 'product_name->id')
+            ],
+            'product_name.en' => [
+                'required', 'string', 'max:255',
+                Rule::unique('products', 'product_name->en')
+            ],
+            'description'   => 'required|array',
+            'description.id' => 'required|string',
+            'description.en' => 'required|string',
+            'category_id'   => 'required|exists:categories,id',
+            'price'         => 'required|numeric|min:0', // Koma sudah ada
+            'image_url'     => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         DB::beginTransaction();
+        $path = null; 
         try {
-            // Simpan file gambar ke storage
-            $path = $request->file('image_url')->store('products', 'public');
+            
+            // Logika Upload WebP
+            if ($request->hasFile('image_url')) {
+                $file = $request->file('image_url');
+                $path = 'products/' . uniqid() . '_' . time() . '.webp';
+                $image_webp = Image::make($file)->encode('webp', 80);
+                Storage::disk('public')->put($path, (string) $image_webp);
+            }
 
             // Simpan data produk
             Product::create([
                 'product_name'  => $validated['product_name'],
-                'description'   => $validated['description'] ?? null,
+                'description'   => $validated['description'],
                 'category_id'   => $validated['category_id'],
                 'price'         => $validated['price'],
-                'image_url'     => $path,
+                'image_url'     => $path, // Path .webp
                 'is_bestseller' => $request->boolean('is_bestseller'),
             ]);
 
@@ -61,14 +82,19 @@ class ProductController extends Controller
             return redirect()
                 ->route('admin.products.index')
                 ->with('success', 'Produk baru berhasil ditambahkan.');
+
         } catch (\Throwable $th) {
             DB::rollBack();
-            if (isset($path)) {
+            if ($path && Storage::disk('public')->exists($path)) {
                 Storage::disk('public')->delete($path);
             }
+            
+            // 🔽--- INI BAGIAN YANG DIPERBAIKI ---🔽
             return back()
                 ->withInput()
+                // Baris ->withErrors($validated) SUDAH DIHAPUS
                 ->with('error', 'Terjadi kesalahan saat menyimpan produk: ' . $th->getMessage());
+            // 🔼--- SELESAI PERBAIKAN ---🔼
         }
     }
 
@@ -77,7 +103,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories = Category::orderBy('category_name')->get();
+        $categories = Category::orderBy('category_name->id')->get();
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -87,43 +113,65 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'description'  => 'nullable|string',
-            'category_id'  => 'required|exists:categories,id',
-            'price'        => 'required|numeric|min:0',
-            'image_url'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_name' => 'required|array',
+            'product_name.id' => [
+                'required', 'string', 'max:255',
+                Rule::unique('products', 'product_name->id')->ignore($product->id)
+            ],
+            'product_name.en' => [
+                'required', 'string', 'max:255',
+                Rule::unique('products', 'product_name->en')->ignore($product->id)
+            ],
+            'description'   => 'required|array',
+            'description.id' => 'required|string',
+            'description.en' => 'required|string',
+            'category_id'   => 'required|exists:categories,id',
+            'price'         => 'required|numeric|min:0', // Koma sudah ada
+            'image_url'     => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         DB::beginTransaction();
+        $newPath = null; 
         try {
             $data = [
                 'product_name'  => $validated['product_name'],
-                'description'   => $validated['description'] ?? null,
+                'description'   => $validated['description'],
                 'category_id'   => $validated['category_id'],
                 'price'         => $validated['price'],
                 'is_bestseller' => $request->boolean('is_bestseller'),
             ];
 
-            // Jika ada file baru, hapus gambar lama lalu simpan baru
+            // Logika Upload WebP (Update)
             if ($request->hasFile('image_url')) {
                 if ($product->image_url && Storage::disk('public')->exists($product->image_url)) {
                     Storage::disk('public')->delete($product->image_url);
                 }
-                $path = $request->file('image_url')->store('products', 'public');
-                $data['image_url'] = $path;
+                $file = $request->file('image_url');
+                $newPath = 'products/' . uniqid() . '_' . time() . '.webp';
+                $image_webp = Image::make($file)->encode('webp', 80);
+                Storage::disk('public')->put($newPath, (string) $image_webp);
+                $data['image_url'] = $newPath;
             }
 
-            $product->update($data);
+            $product->update($data); 
             DB::commit();
 
             return redirect()
                 ->route('admin.products.index')
                 ->with('success', 'Data produk berhasil diperbarui.');
+
         } catch (\Throwable $th) {
             DB::rollBack();
+            if ($newPath && Storage::disk('public')->exists($newPath)) {
+                Storage::disk('public')->delete($newPath);
+            }
+
+            // 🔽--- INI BAGIAN YANG DIPERBAIKI ---🔽
             return back()
                 ->withInput()
+                // Baris ->withErrors($validated) SUDAH DIHAPUS
                 ->with('error', 'Gagal memperbarui produk: ' . $th->getMessage());
+            // 🔼--- SELESAI PERBAIKAN ---🔼
         }
     }
 
@@ -136,7 +184,6 @@ class ProductController extends Controller
             if ($product->image_url && Storage::disk('public')->exists($product->image_url)) {
                 Storage::disk('public')->delete($product->image_url);
             }
-
             $product->delete();
             return redirect()
                 ->route('admin.products.index')

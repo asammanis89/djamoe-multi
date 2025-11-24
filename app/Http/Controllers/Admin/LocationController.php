@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Illuminate\Http\Request;
+// REVISI: Kita tidak perlu 'Rule' di sini karena nama/alamat lokasi tidak perlu unik
 
 class LocationController extends Controller
 {
@@ -13,7 +14,8 @@ class LocationController extends Controller
      */
     public function index()
     {
-        $locations = Location::latest()->get();
+        // REVISI: Urutkan berdasarkan terjemahan 'id'
+        $locations = Location::orderBy('name->id')->get(); 
         return view('admin.locations.index', compact('locations'));
     }
 
@@ -30,14 +32,20 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'required|string',
+        // REVISI: Sesuaikan aturan validasi untuk data translatable
+        $validated = $request->validate([
+            'name' => 'required|array',
+            'name.id' => 'required|string|max:255',
+            'name.en' => 'required|string|max:255',
+            'address' => 'required|array',
+            'address.id' => 'required|string',
+            'address.en' => 'required|string',
             'phone_number' => 'nullable|string|max:20',
             'google_maps_url' => 'nullable|url',
         ]);
 
-        Location::create($request->all());
+        // REVISI: Gunakan $validated untuk create
+        Location::create($validated); // Spatie akan menangani array
 
         return redirect()->route('admin.locations.index')->with('success', 'Lokasi berhasil ditambahkan.');
     }
@@ -55,14 +63,22 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'required|string',
+        // REVISI: Sesuaikan aturan validasi untuk data translatable
+        $validated = $request->validate([
+            'name' => 'required|array',
+            'name.id' => 'required|string|max:255',
+            'name.en' => 'required|string|max:255',
+            'address' => 'required|array',
+            'address.id' => 'required|string',
+            'address.en' => 'required|string',
             'phone_number' => 'nullable|string|max:20',
             'google_maps_url' => 'nullable|url',
+            // REVISI: Tambahkan location_id untuk error handling di modal
+            'location_id' => 'required|exists:locations,id',
         ]);
 
-        $location->update($request->all());
+        // REVISI: Gunakan $validated untuk update
+        $location->update($validated); // Spatie akan menangani array
 
         return redirect()->route('admin.locations.index')->with('success', 'Lokasi berhasil diperbarui.');
     }

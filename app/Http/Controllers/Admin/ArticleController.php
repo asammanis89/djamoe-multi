@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule; // REVISI: Tambahkan ini
 
 class ArticleController extends Controller
 {
@@ -31,20 +32,28 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'subtitle' => 'required|string|max:255',
-            'description' => 'required|string',
+        // REVISI: Sesuaikan aturan validasi untuk data translatable
+        $validated = $request->validate([
+            'title' => 'required|array',
+            'title.id' => 'required|string|max:255',
+            'title.en' => 'required|string|max:255',
+            'subtitle' => 'required|array',
+            'subtitle.id' => 'required|string|max:255',
+            'subtitle.en' => 'required|string|max:255',
+            'description' => 'required|array',
+            'description.id' => 'required|string',
+            'description.en' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         // Upload gambar
         $imagePath = $request->file('image')->store('articles', 'public');
 
+        // REVISI: Ambil data dari $validated, bukan $request
         Article::create([
-            'title' => $request->title,
-            'subtitle' => $request->subtitle,
-            'description' => $request->description,
+            'title' => $validated['title'], // Spatie akan menangani array
+            'subtitle' => $validated['subtitle'], // Spatie akan menangani array
+            'description' => $validated['description'], // Spatie akan menangani array
             'image' => $imagePath,
         ]);
 
@@ -64,14 +73,28 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'subtitle' => 'required|string|max:255',
-            'description' => 'required|string',
+        // REVISI: Sesuaikan aturan validasi untuk data translatable
+        $validated = $request->validate([
+            'title' => 'required|array',
+            'title.id' => 'required|string|max:255',
+            'title.en' => 'required|string|max:255',
+            'subtitle' => 'required|array',
+            'subtitle.id' => 'required|string|max:255',
+            'subtitle.en' => 'required|string|max:255',
+            'description' => 'required|array',
+            'description.id' => 'required|string',
+            'description.en' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            // REVISI: Tambahkan article_id untuk error handling di modal
+            'article_id' => 'required|exists:articles,id', 
         ]);
-
-        $data = $request->except('image');
+        
+        // REVISI: Ambil data dari $validated agar aman
+        $data = [
+            'title' => $validated['title'],
+            'subtitle' => $validated['subtitle'],
+            'description' => $validated['description'],
+        ];
 
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada
@@ -102,4 +125,3 @@ class ArticleController extends Controller
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil dihapus.');
     }
 }
-

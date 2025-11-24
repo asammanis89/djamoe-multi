@@ -1,0 +1,58 @@
+/* 📁 resources/css/pages/about.css (File Baru) */
+/* Style ini menimpa font global 'Inter' khusus di halaman 'about' */
+body {
+    font-family: 'DM Sans', sans-serif;
+    color: #e6e2d3;
+}
+h1, h2, h3, h4 {
+    font-family: 'DM Serif Display', serif;
+    color: #d9b26f;
+    font-variant-numeric: lining-nums; 
+}
+p, span {
+    font-family: 'DM Sans', sans-serif;
+    font-variant-numeric: lining-nums;
+}
+/* Animasi 'reveal' ini duplikat dari app.css, sebaiknya dihapus dari sini */
+.reveal-animation {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeUp 1s ease forwards;
+}
+@keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+.card-container {
+    perspective: 1000px;
+}
+.spice-card {
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    transform-style: preserve-3d;
+}
+.card-container:hover .spice-card {
+    transform: rotateY(10deg) rotateX(10deg) translateZ(20px);
+    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.3);
+}
+img {
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+}
+/* Kelas warna ini sudah ada di tailwind.config.js, jadi ini duplikat */
+.text-accent { color: #d9b26f; }
+.bg-dark-bg { background-color: #13231a; }
+.bg-dark-card { background-color: #11221a; }
+.text-light-text { color: #e6e2d3; }
+p {
+    line-height: 1.8;
+    letter-spacing: 0.2px;
+}
+@media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.5rem; }
+}

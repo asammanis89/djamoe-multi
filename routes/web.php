@@ -8,50 +8,86 @@ use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\FlyerController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization; 
 
-// ==============================
-// ROUTE FRONTEND (USER SIDE)
-// ==============================
-Route::get('/', [PageController::class, 'index'])->name('home');
-Route::get('/aktivitas', [PageController::class, 'aktivitas'])->name('aktivitas');
-Route::get('/outlet', [PageController::class, 'outlet'])->name('outlet');
-Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION ROUTES (LOGIN / LOGOUT)
+|--------------------------------------------------------------------------
+*/
 
-// ------------------------------
-// PRODUK (Katalog Produk D’jamoe)
-// ------------------------------
-// Halaman utama produk → tampilkan daftar kategori
-Route::get('/produk', [PageController::class, 'produk'])->name('produk.index');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+});
 
-// AJAX: ambil produk berdasarkan kategori
-Route::get('/produk/kategori/{category}', [PageController::class, 'getProductsByCategory'])
-    ->name('produk.kategori');
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
-// AJAX: ambil detail produk
-Route::get('/produk/detail/{product}', [PageController::class, 'getProductDetail'])
-    ->name('produk.detail');
+/*
+|--------------------------------------------------------------------------
+| ADMIN PANEL ROUTES (DILINDUNGI)
+|--------------------------------------------------------------------------
+*/
 
+Route::middleware(['auth', 'role:admin,superadmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-// ==============================
-// ROUTE ADMIN (AdminLTE Dashboard)
-// ==============================
-Route::prefix('admin')
-    ->name('admin.')
-    // ->middleware('auth') // aktifkan jika sudah ada login sistem
-    ->group(function () {
-        // Dashboard default: tampilkan daftar produk
-        Route::get('/', [ProductController::class, 'index'])->name('dashboard');
+    // CRUD Resources
+    Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('locations', LocationController::class);
+    Route::resource('articles', ArticleController::class);
+    Route::resource('abouts', AboutController::class);
+    Route::resource('flyers', FlyerController::class);
 
-        // CRUD Resources
-        Route::resource('categories', CategoryController::class);
-        Route::resource('products', ProductController::class);
-        Route::resource('locations', LocationController::class);
-        Route::resource('articles', ArticleController::class);
-        Route::resource('abouts', AboutController::class);
-        Route::resource('flyers', FlyerController::class);
+    // Hanya SUPER_ADMIN yang bisa kelola user
+    Route::middleware(['role:superadmin'])->group(function () {
+        Route::resource('users', UserController::class)->except(['show']);
+        Route::put('users/{user}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+        Route::put('users/{user}/activate', [UserController::class, 'activate'])->name('users.activate');
     });
+});
 
-// ==============================
-// AUTENTIKASI (Opsional)
-// ==============================
-// require __DIR__.'/auth.php';
+
+/*
+|--------------------------------------------------------------------------
+| FRONTEND ROUTES (PUBLIC - DENGAN LOKALISASI)
+|--------------------------------------------------------------------------
+*/
+
+Route::group([
+    'prefix' => LaravelLocalization::setLocale(),
+    'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+], function() {
+
+    /** RUTE WEB YANG DIPANGGIL LANGSUNG OLEH PENGGUNA **/
+    
+    Route::get('/', [PageController::class, 'index'])->name('home');
+    Route::get('/aktivitas', [PageController::class, 'aktivitas'])->name('aktivitas');
+    Route::get('/outlet', [PageController::class, 'outlet'])->name('outlet');
+    Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
+    
+    // PRODUK
+    Route::get('/produk', [PageController::class, 'produk'])->name('produk.index');
+    
+    // Rute AJAX tidak ada di sini
+
+}); // <-- AKHIR DARI GRUP LOKALISASI
+
+
+/*
+|--------------------------------------------------------------------------
+| API ROUTES (PUBLIC - TANPA LOKALISASI)
+|--------------------------------------------------------------------------
+*/
+
+// ===============================================
+// REVISI: KEMBALIKAN Rute AJAX ke SINI (DI LUAR GRUP)
+// ===============================================
+// Ini akan memperbaiki error 404 "halaman kosong" Anda
+Route::get('/produk/kategori/{category}', [PageController::class, 'getProductsByCategory'])->name('produk.kategori');
+Route::get('/produk/detail/{product}', [PageController::class, 'getProductDetail'])->name('produk.detail');

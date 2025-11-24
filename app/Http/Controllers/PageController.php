@@ -17,44 +17,32 @@ class PageController extends Controller
      */
     public function index()
     {
-        // Ambil flyer untuk hero slider
-        $flyers = Flyer::all();
-
-        // Ambil produk unggulan (bestseller) dengan relasi category
+        $flyers = Flyer::latest()->get();
         $featuredProducts = Product::with('category')
             ->where('is_bestseller', true)
             ->latest()
             ->take(8)
             ->get();
 
-        return view('welcome', compact('flyers', 'featuredProducts')); // Sesuaikan nama view jika berbeda
+        return view('welcome', compact('flyers', 'featuredProducts'));
     }
 
     /**
      * Menampilkan halaman Produk.
-     * Method ini telah diperbarui untuk menangani tampilan kategori dan produk.
      */
     public function produk(Category $category = null)
     {
-        // Nomor WhatsApp sudah diperbarui sesuai permintaan Anda
-        $whatsappNumber = '6282232279783'; // <-- NOMOR SUDAH BENAR
-
+        $whatsappNumber = '6282232279783';
         $categories = null;
         $products = null;
 
         if ($category) {
-            // Jika ada objek $category yang dikirim dari route (misal: /produk/kategori/jamu-kuat),
-            // maka kita muat produk-produk yang ada di dalamnya.
             $category->load('products');
             $products = $category->products;
         } else {
-            // Jika tidak ada kategori (pengguna mengunjungi /produk),
-            // maka kita ambil semua data kategori untuk ditampilkan.
             $categories = Category::latest()->get();
         }
 
-        // Kirim semua variabel yang mungkin dibutuhkan ke view.
-        // View 'produk.blade.php' akan menentukan mana yang akan ditampilkan.
         return view('produk', compact('category', 'categories', 'products', 'whatsappNumber'));
     }
 
@@ -64,7 +52,7 @@ class PageController extends Controller
     public function aktivitas()
     {
         $articles = Article::latest()->get();
-        return view('aktivitas', compact('articles')); // Sesuaikan nama view jika berbeda
+        return view('aktivitas', compact('articles'));
     }
 
     /**
@@ -73,7 +61,7 @@ class PageController extends Controller
     public function outlet()
     {
         $locations = Location::orderBy('created_at', 'asc')->get();
-        return view('outlet', compact('locations')); // Sesuaikan nama view jika berbeda
+        return view('outlet', compact('locations'));
     }
 
     /**
@@ -81,8 +69,8 @@ class PageController extends Controller
      */
     public function about()
     {
-        $abouts = About::orderBy('created_at', 'asc')->get();
-        return view('about', compact('abouts')); // Sesuaikan nama view jika berbeda
+        $abouts = About::orderBy('year_text', 'asc')->get(); 
+        return view('about', compact('abouts'));
     }
 
     /**
@@ -94,22 +82,50 @@ class PageController extends Controller
     {
         $products = Product::where('category_id', $category->id)->get();
 
+        // ===============================================
+        // REVISI 1: Ubah $products menjadi array kustom
+        // Ini akan mengirim JSON mentah yang dibutuhkan JS Anda
+        // ===============================================
+        $productData = $products->map(function ($product) {
+            return [
+                'id' => $product->id,
+                'price' => $product->price,
+                'image_url' => $product->image_url,
+                'is_bestseller' => $product->is_bestseller,
+                
+                // Ini akan mengirim: "product_name": {"id": "indo", "en": "eng"}
+                'product_name' => $product->getTranslations('product_name'), 
+                'description' => $product->getTranslations('description'),
+                'full_description' => $product->getTranslations('full_description'),
+            ];
+        });
+
         return response()->json([
-            'category' => $category->category_name,
-            'products' => $products
+            // Kirim JSON kategori juga
+            'category' => $category->getTranslations('category_name'), 
+            'products' => $productData
         ]);
     }
 
     /**
-     * ✅ METHOD BARU
-     * Mengambil detail satu produk untuk ditampilkan di modal.
+     * Mengambil detail satu produk untuk ditampilkan di modal (AJAX).
      * @param Product $product
      * @return \Illuminate\Http\JsonResponse
      */
     public function getProductDetail(Product $product)
     {
-        // Mengembalikan data produk sebagai JSON
-        return response()->json($product);
+        // ===============================================
+        // REVISI 2: Kirim sebagai OBJEK JSON manual
+        // ===============================================
+        return response()->json([
+            'id' => $product->id,
+            'price' => $product->price,
+            'image_url' => $product->image_url,
+            
+            // Ini akan mengirim: "product_name": {"id": "indo", "en": "eng"}
+            'product_name' => $product->getTranslations('product_name'),
+            'description' => $product->getTranslations('description'),
+            'full_description' => $product->getTranslations('full_description'),
+        ]);
     }
 }
-

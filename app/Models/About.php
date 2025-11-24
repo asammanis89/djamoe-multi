@@ -1,19 +1,18 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations; // <--- 1. TAMBAHKAN INI
 
 class About extends Model
 {
     use HasFactory;
+    use HasTranslations; // <--- 2. TAMBAHKAN INI
 
-    /**
-     * Atribut yang dapat diisi secara massal.
-     *
-     * @var array<int, string>
-     */
+    // 3. TAMBAHKAN INI
+    public $translatable = ['year_text', 'title', 'description'];
+
     protected $fillable = [
         'year_text',
         'title',

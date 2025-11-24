@@ -14,7 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('password_resets', function (Blueprint $table) {
-            $table->string('email')->primary();
+            // PERBAIKAN: Ganti ->primary() menjadi ->index()
+            // Ini memungkinkan satu email memiliki beberapa token reset (meskipun 
+            // hanya yang terbaru yang valid), dan mempercepat pencarian.
+            $table->string('email')->index(); 
+            
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });

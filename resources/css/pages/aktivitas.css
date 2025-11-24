@@ -1,0 +1,8 @@
+/* 📁 resources/css/pages/aktivitas.css (File Baru) */
+#activity-modal {
+    transition: opacity 0.3s ease-in-out;
+}
+#activity-modal .modal-content {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+/* Style .hidden (opacity-0, scale-95) sudah ditangani oleh kelas Tailwind di HTML */

@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate; // ✅ Import Gate
+use App\Models\User; // ✅ Import User
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
-    }
+        // Gate untuk superadmin
+        Gate::define('superadmin', function (User $user) {
+            return $user->role === 'superadmin';
+        });
+    } // ✅ Tutup method boot()
 }

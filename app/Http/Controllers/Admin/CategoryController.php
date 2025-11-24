@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule; // REVISI: Tambahkan ini untuk validasi unique
 
 class CategoryController extends Controller
 {
@@ -31,20 +32,33 @@ class CategoryController extends Controller
     // ==========================
     public function store(Request $request)
     {
+        // REVISI: Sesuaikan aturan validasi untuk data translatable
         $request->validate([
-            'category_name' => 'required|string|max:255|unique:categories,category_name',
+            'category_name' => 'required|array', // Pastikan ini adalah array
+            'category_name.id' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'category_name->id') // Cek unique untuk locale 'id'
+            ],
+            'category_name.en' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'category_name->en') // Cek unique untuk locale 'en'
+            ],
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = [
-            'category_name' => $request->category_name,
+            'category_name' => $request->category_name, // Ini sudah benar, Spatie akan menangani array
         ];
 
         if ($request->hasFile('image_url')) {
             $data['image_url'] = $request->file('image_url')->store('categories', 'public');
         }
 
-        Category::create($data);
+        Category::create($data); // Kode Anda sudah benar, tidak perlu diubah
 
         return redirect()
             ->route('admin.categories.index')
@@ -64,13 +78,28 @@ class CategoryController extends Controller
     // ==========================
     public function update(Request $request, Category $category)
     {
+        // REVISI: Sesuaikan aturan validasi untuk data translatable
         $request->validate([
-            'category_name' => 'required|string|max:255|unique:categories,category_name,' . $category->id,
+            'category_name' => 'required|array',
+            'category_name.id' => [
+                'required',
+                'string',
+                'max:255',
+                // Cek unique untuk locale 'id', abaikan data saat ini
+                Rule::unique('categories', 'category_name->id')->ignore($category->id) 
+            ],
+            'category_name.en' => [
+                'required',
+                'string',
+                'max:255',
+                // Cek unique untuk locale 'en', abaikan data saat ini
+                Rule::unique('categories', 'category_name->en')->ignore($category->id)
+            ],
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = [
-            'category_name' => $request->category_name,
+            'category_name' => $request->category_name, // Ini sudah benar, Spatie akan menangani array
         ];
 
         if ($request->hasFile('image_url')) {
@@ -83,7 +112,7 @@ class CategoryController extends Controller
             $data['image_url'] = $request->file('image_url')->store('categories', 'public');
         }
 
-        $category->update($data);
+        $category->update($data); // Kode Anda sudah benar, tidak perlu diubah
 
         return redirect()
             ->route('admin.categories.index')
