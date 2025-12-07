@@ -392,7 +392,7 @@ html { scroll-behavior: smooth; }
     line-height: 1.2;
 }
 
-/* Harga Produk (p pertama di JS) */
+/* Harga Produk (p pertama di JSS) */
 #modal-body .modal-content p.text-xl {
     font-family: sans-serif;
     font-size: 1.25rem !important;
