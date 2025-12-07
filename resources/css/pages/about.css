@@ -67,7 +67,7 @@
     z-index: -1;
 }
 
-/* Tambahan: Pastikan di Mobile pattern elegant tetap bagus */
+/* Tambahan: Pastikan di Mobile pattern elegant tetap baguss */
 @media (max-width: 768px) {
     .bg-elegant::before {
         /* Di HP mungkin pattern perlu diulang agar tidak pecah */
