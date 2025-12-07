@@ -1,0 +1,140 @@
+/* =========================================
+   OUTLET PAGE STYLING (FINAL FIX)
+   ========================================= */
+
+/* --- 1. HERO SECTION --- */
+.outlet-hero {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #1A3A24;
+    overflow: hidden;
+}
+
+/* --- 2. BACKGROUND HALAMAN --- */
+.bg-mint-gradient {
+    background: linear-gradient(to bottom, #FFFFFF 0%, #F0F7F4 100%);
+    position: relative;
+}
+
+/* --- 3. CARD STYLING (AWAL PUTIH BERSIH) --- */
+.outlet-card {
+    background-color: #FFFFFF; 
+    
+    /* [GARIS EMAS DI ATAS] */
+    border-top: 4px solid #E6D793;
+    
+    /* Border samping tipis */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 1rem;
+    
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* HAPUS SEMUA ORNAMEN TAMBAHAN */
+.outlet-card::before,
+.outlet-card::after {
+    display: none !important;
+}
+
+/* --- INTERAKSI HOVER PADA CARD --- */
+.outlet-card:hover {
+    background-color: #1A3A24 !important; /* Jadi Hijau Tua */
+    border-color: #E6D793;
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* --- WARNA TEKS (TRANSISI WARNA) --- */
+
+/* Awal: Judul Hijau */
+.outlet-card h3 {
+    color: #1A3A24;
+    transition: color 0.3s;
+}
+/* Hover: Judul jadi Emas */
+.outlet-card:hover h3 { 
+    color: #E6D793 !important; 
+}
+
+/* Awal: Teks Abu-abu */
+.outlet-card p, .outlet-card span {
+    color: #4B5563;
+    transition: color 0.3s;
+}
+/* Hover: Teks jadi Putih */
+.outlet-card:hover p,
+.outlet-card:hover span,
+.outlet-card:hover .text-gray-600,
+.outlet-card:hover .text-gray-500,
+.outlet-card:hover .text-gray-800 { 
+    color: #F2F7F5 !important; 
+}
+
+/* --- STYLE TOMBOL (FIX WARNA) --- */
+.btn-direction {
+    /* [STATE AWAL]: Emas Pudar (Transparan) */
+    background-color: rgba(230, 215, 147, 0.3); 
+    color: #1A3A24; /* Teks Hijau */
+    
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    border: 1px solid #E6D793; /* Garis pinggir emas */
+    transition: all 0.3s ease;
+}
+
+/* [STATE HOVER]: Emas Terang Solid */
+.outlet-card:hover .btn-direction,
+.btn-direction:hover {
+    background-color: #E6D793; /* Emas Solid */
+    color: #1A3A24; /* Teks & Icon Tetap Hijau (Kontras) */
+    box-shadow: 0 0 15px rgba(230, 215, 147, 0.5); /* Glow effect */
+    border-color: #E6D793;
+}
+
+/* --- PERBAIKAN ICON (LOGIKA WARNA BERTINGKAT) --- */
+
+/* 1. Aturan Dasar: Saat Hover Card, semua Icon jadi EMAS */
+/* TAPI KECUALI: Icon di dalam lingkaran & Icon di dalam tombol */
+.outlet-card:hover i:not(.icon-wrapper i):not(.btn-direction i),
+.outlet-card:hover svg:not(.icon-wrapper svg):not(.btn-direction svg) {
+    color: #E6D793 !important;
+    stroke: #E6D793 !important;
+}
+
+/* 2. Wrapper Lingkaran (Phone/MapPin): Background jadi Emas */
+.outlet-card:hover .icon-wrapper {
+    background-color: #E6D793 !important; 
+    color: #1A3A24 !important;
+}
+/* Icon di DALAM Lingkaran: Tetap Hijau */
+.outlet-card:hover .icon-wrapper svg,
+.outlet-card:hover .icon-wrapper i {
+    color: #1A3A24 !important; 
+    stroke: #1A3A24 !important;
+}
+
+/* 3. ICON DI DALAM TOMBOL (Panah): WAJIB HIJAU */
+/* Ini yang memperbaiki icon hilang */
+.outlet-card:hover .btn-direction i,
+.outlet-card:hover .btn-direction svg,
+.btn-direction:hover i,
+.btn-direction:hover svg {
+    color: #1A3A24 !important; /* Tetap Hijau Gelap */
+    stroke: #1A3A24 !important;
+}
+
+/* --- MODAL --- */
+.modal-overlay {
+    backdrop-filter: blur(4px);
+}

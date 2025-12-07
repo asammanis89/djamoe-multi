@@ -60,8 +60,12 @@ class PageController extends Controller
      */
     public function outlet()
     {
-        $locations = Location::orderBy('created_at', 'asc')->get();
-        return view('outlet', compact('locations'));
+        // UBAH 1: Urutkan berdasarkan Nama (bukan created_at), supaya rapi A-Z
+        // UBAH 2: Tambahkan ->groupBy('name') di ujung
+        $groupedLocations = Location::orderBy('name', 'asc')->get()->groupBy('name');
+        
+        // UBAH 3: Kirim variabel dengan nama 'groupedLocations' (sesuai Blade yang baru)
+        return view('outlet', compact('groupedLocations'));
     }
 
     /**

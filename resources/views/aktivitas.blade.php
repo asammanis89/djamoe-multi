@@ -1,40 +1,72 @@
 @extends('layouts.app')
 @section('title', __('Aktivitas & Wawasan') . " - D'jamoe")
+
+@push('styles')
+    {{-- Menggunakan CSS Khusus Aktivitas yang sudah di-update --}}
+    @vite(['resources/css/pages/aktivitas.css', 'resources/js/pages/aktivitas-modal.js'])
+@endpush
+
 @section('content')
 
 {{-- HERO SECTION --}}
-<section class="relative h-[60vh] bg-cover bg-center flex items-center justify-center text-center text-white" style="background-image: linear-gradient(rgba(10, 28, 17, 0.7), rgba(10, 28, 17, 0.8)), url('{{ asset('gambar/gambar22.jpeg') }}');">
-    <div class="reveal-animation">
-        <h1 class="text-4xl md:text-7xl font-serif font-bold text-accent">{{ __('Aktivitas & Wawasan') }}</h1>
-        <p class="mt-4 text-base md:text-xl max-w-3xl mx-auto text-white/90">{{ __('Lebih dari sekadar produk, kami berbagi pengalaman...') }}</p>
+{{-- MENGGUNAKAN STYLE HERO DARI HALAMAN PRODUK --}}
+<section class="relative pt-20 pb-8 md:pt-32 md:pb-12 bg-elegant-activity overflow-hidden">
+    {{-- Dekorasi Background (Sama dengan Halaman Produk) --}}
+    <div class="absolute -left-20 top-20 w-96 h-96 bg-[#E6D793] rounded-full blur-[120px] opacity-10 pointer-events-none animate-pulse-slow"></div>
+    <div class="absolute -right-20 bottom-20 w-96 h-96 bg-[#E6D793] rounded-full blur-[120px] opacity-10 pointer-events-none animate-pulse-slow" style="animation-delay: 2s;"></div>
+    
+    {{-- Floating Ornaments (Opsional, agar sama persis dengan Produk) --}}
+    <div class="floating-ornament ornament-1"></div>
+    <div class="floating-ornament ornament-2"></div>
+
+    <div class="container mx-auto px-4 text-center relative z-10">
+        <span class="inline-block px-6 py-2 bg-[#E6D793]/20 text-[#E6D793] rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-[#E6D793]/30 reveal-animation">
+            {{ __('Berbagi Pengalaman') }}
+        </span>
+
+        <h1 class="text-4xl md:text-6xl font-serif font-bold text-[#E6D793] mb-6 reveal-animation leading-tight" style="text-shadow: 0 4px 20px rgba(0,0,0,0.8);">
+            {{ __('Aktivitas & Wawasan') }}
+        </h1>
+        <p class="text-[#FBF8ED]/80 text-base md:text-xl max-w-3xl mx-auto leading-relaxed reveal-animation" style="transition-delay: 100ms;">
+            {{ __('Lebih dari sekadar produk, kami berbagi pengalaman dan pengetahuan tentang Jamu') }}
+        </p>
     </div>
 </section>
 
-{{-- WAWASAN SECTION --}}
-<section class="py-12 md:py-24">
-    <div class="container mx-auto px-4 space-y-12 md:space-y-20">
+{{-- WAWASAN & KONTEN --}}
+{{-- MENGGUNAKAN BG-MINT-ACTIVITY YANG SUDAH DI-UPDATE DENGAN BATIK --}}
+<section class="pt-8 pb-16 md:pt-12 md:pb-24 bg-mint-activity relative overflow-hidden">
+    {{-- HAPUS DIV PATTERN DOTS LAMA (Agar Batik CSS Muncul) --}}
+    {{-- <div class="absolute inset-0 pattern-dots opacity-20 pointer-events-none"></div> --}}
+
+    <div class="container mx-auto px-4 space-y-12 md:space-y-20 relative z-10">
+        
+        {{-- SECTION 1: WAWASAN CARD --}}
         <div>
-            <div class="bg-dark-card rounded-2xl shadow-xl p-6 md:p-12 reveal-animation">
+            {{-- Card Wawasan (Dark Green) --}}
+            <div class="bg-dark-card-activity rounded-2xl p-6 md:p-12 reveal-animation">
                 <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
                     <div>
-                        <img src="{{ asset('gambar/gambar22.jpeg') }}" alt="Wawasan tentang Jamu" class="rounded-lg shadow-lg mb-6 w-full object-cover aspect-video" loading="lazy">
-                        <h3 class="text-2xl md:text-3xl font-serif font-bold text-accent">{{ __('Selami Lebih Dalam Dunia Jamu') }}</h3>
-                        <p class="mt-4 text-sm md:text-base text-light-text/80 leading-relaxed">{{ __('Kami percaya edukasi adalah kunci...') }}</p>    
+                        <img src="{{ asset('gambar/gambar22.jpeg') }}" alt="Wawasan tentang Jamu" class="rounded-lg shadow-lg mb-6 w-full object-cover aspect-video border border-opacity-20 border-[#E6D793]" loading="lazy">
+                        
+                        <h3 class="text-2xl md:text-3xl font-serif font-bold text-[#E6D793]">{{ __('Selami Lebih Dalam Dunia Jamu') }}</h3>
+                        
+                        <p class="mt-4 text-sm md:text-base text-[#FBF8ED]/90 leading-relaxed">{{ __('Kami percaya edukasi adalah kunci untuk melestarikan warisan budaya. Temukan berbagai artikel menarik dan video dokumenter perjalanan kami.') }}</p>    
                     </div>
                     <div class="space-y-8">
                         <div>
-                            <h4 class="text-xl md:text-2xl font-serif font-semibold text-accent/90 border-b-2 border-accent/20 pb-2 mb-4">{{ __('Artikel Pilihan') }}</h4>
+                            <h4 class="text-xl md:text-2xl font-serif font-semibold text-[#E6D793] border-b border-[#E6D793]/30 pb-2 mb-4">{{ __('Artikel Pilihan') }}</h4>
                             <ul class="space-y-3">
-                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-light-text/80 hover:text-accent transition-colors group"><i data-lucide="book-open" class="w-5 h-5 text-accent/70 group-hover:text-accent"></i>{{ __('Manfaat Kunyit...') }}</a></li>
-                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-light-text/80 hover:text-accent transition-colors group"><i data-lucide="book-open" class="w-5 h-5 text-accent/70 group-hover:text-accent"></i>{{ __('Sejarah Jamu Gendong...') }}</a></li>
-                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-light-text/80 hover:text-accent transition-colors group"><i data-lucide="book-open" class="w-5 h-5 text-accent/70 group-hover:text-accent"></i>{{ __('5 Rempah Dapur...') }}</a></li>
+                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-[#FBF8ED]/80 hover:text-[#E6D793] transition-colors group"><i data-lucide="book-open" class="w-5 h-5 text-[#E6D793] group-hover:scale-110 transition-transform"></i>{{ __('Manfaat Kunyit untuk Kesehatan') }}</a></li>
+                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-[#FBF8ED]/80 hover:text-[#E6D793] transition-colors group"><i data-lucide="book-open" class="w-5 h-5 text-[#E6D793] group-hover:scale-110 transition-transform"></i>{{ __('Sejarah Jamu Gendong') }}</a></li>
+                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-[#FBF8ED]/80 hover:text-[#E6D793] transition-colors group"><i data-lucide="book-open" class="w-5 h-5 text-[#E6D793] group-hover:scale-110 transition-transform"></i>{{ __('5 Rempah Dapur Wajib Punya') }}</a></li>
                             </ul>
                         </div>
                         <div>
-                            <h4 class="text-xl md:text-2xl font-serif font-semibold text-accent/90 border-b-2 border-accent/20 pb-2 mb-4">{{ __('Tonton Kami di YouTube') }}</h4>
+                            <h4 class="text-xl md:text-2xl font-serif font-semibold text-[#E6D793] border-b border-[#E6D793]/30 pb-2 mb-4">{{ __('Tonton Kami di YouTube') }}</h4>
                             <ul class="space-y-3">
-                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-light-text/80 hover:text-accent transition-colors group"><i data-lucide="youtube" class="w-5 h-5 text-accent/70 group-hover:text-accent"></i>{{ __('Proses Pembuatan...') }}</a></li>
-                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-light-text/80 hover:text-accent transition-colors group"><i data-lucide="youtube" class="w-5 h-5 text-accent/70 group-hover:text-accent"></i>{{ __('Wawancara dengan Petani...') }}</a></li>
+                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-[#FBF8ED]/80 hover:text-[#E6D793] transition-colors group"><i data-lucide="youtube" class="w-5 h-5 text-[#E6D793] group-hover:scale-110 transition-transform"></i>{{ __('Proses Pembuatan Jamu Modern') }}</a></li>
+                                <li><a href="#" class="flex items-center gap-3 text-sm md:text-base text-[#FBF8ED]/80 hover:text-[#E6D793] transition-colors group"><i data-lucide="youtube" class="w-5 h-5 text-[#E6D793] group-hover:scale-110 transition-transform"></i>{{ __('Wawancara dengan Petani Jahe') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -42,70 +74,117 @@
             </div>
         </div>
 
-        {{-- PENGALAMAN UNIK SECTION --}}
+        {{-- SECTION 2: PENGALAMAN UNIK (GRID ACTIVITY) --}}
         <div>
-            <div class="text-center mb-8 md:mb-16">
-                <h2 class="text-3xl md:text-5xl font-serif font-bold text-accent reveal-animation">{{ __('Pilihan Pengalaman Unik') }}</h2>
-                <p class="mt-4 text-base md:text-lg text-light-text/70 max-w-3xl mx-auto reveal-animation" style="transition-delay: 100ms;">{{ __('Selami dunia jamu lebih dalam...') }}</p>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-[#1A3A24] reveal-animation">{{ __('Pilihan Pengalaman Unik') }}</h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-transparent via-[#E6D793] to-transparent mx-auto mt-6 rounded-full reveal-animation"></div>
+                <p class="mt-4 text-base md:text-lg text-[#1A3A24]/70 max-w-2xl mx-auto reveal-animation" style="transition-delay: 100ms;">{{ __('Selami dunia jamu lebih dalam melalui berbagai kegiatan dan wawasan kami.') }}</p>
             </div>
             
+            {{-- GRID CARD --}}
             <div class="grid grid-cols-2 gap-4 md:gap-8 lg:grid-cols-4">
                 @forelse ($articles as $article)
                 <div 
                     data-title="{{ $article->title }}" 
                     data-image="{{ asset('storage/' . $article->image) }}" 
                     data-description="{{ $article->description }}" 
-                    class="activity-card group cursor-pointer bg-dark-card rounded-xl md:rounded-2xl shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2 reveal-animation" 
+                    class="activity-card group cursor-pointer overflow-hidden reveal-animation" 
                     style="transition-delay: {{ $loop->iteration * 100 }}ms;">
                     
-                    <div class="relative h-36 md:h-48 overflow-hidden bg-cover bg-center" style="background-image: url('{{ asset('storage/' . $article->image) }}')">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end justify-center p-3 md:p-4">
-                            <h2 class="text-base md:text-2xl font-serif font-bold text-white text-center line-clamp-2">{{ $article->subtitle }}</h2>
+                    {{-- Image Container --}}
+                    <div class="relative h-48 md:h-64 overflow-hidden bg-gray-100">
+                        <img src="{{ asset('storage/' . $article->image) }}" 
+                            alt="{{ $article->subtitle }}" 
+                            class="w-full h-full object-cover activity-image transition-transform duration-700 group-hover:scale-110 group-hover:rotate-1" 
+                            loading="lazy" 
+                            onerror="this.src='https://placehold.co/500x500/102b19/E6D793?text={{ urlencode($article->subtitle) }}'">
+                        
+                        {{-- Gradient Overlay --}}
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#1A3A24] via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300"></div>
+                        
+                        {{-- Title Overlay on Image (Mobile Friendly) --}}
+                        <div class="absolute bottom-0 left-0 p-4 w-full">
+                            <h2 class="text-sm md:text-lg font-serif font-bold text-[#E6D793] line-clamp-2 drop-shadow-md">{{ $article->subtitle }}</h2>
                         </div>
                     </div>
                     
-                    <div class="p-4 md:p-6 flex flex-col flex-grow">
-                        <h3 class="font-serif text-sm md:text-xl font-bold text-accent line-clamp-2">{{ $article->title }}</h3>
-                        <div class="h-20 overflow-hidden">
-                            <p class="text-light-text/70 mt-2 text-sm leading-relaxed break-words">{{ Str::limit($article->description, 100) }}</p>
+                    {{-- Card Content --}}
+                    <div class="p-4 md:p-6 flex flex-col flex-grow bg-white relative">
+                        <h3 class="font-serif text-lg md:text-xl font-bold activity-title line-clamp-2 mb-2 text-[#1A3A24] group-hover:text-[#E6D793] transition-colors">{{ $article->title }}</h3>
+                        
+                        <div class="h-16 overflow-hidden mb-4">
+                            <p class="text-[#1A3A24]/70 text-sm leading-relaxed line-clamp-3">{{ Str::limit($article->description, 100) }}</p>
                         </div>
-                        <div class="mt-auto pt-3 md:pt-4">
-                            <span class="font-semibold text-accent/90 group-hover:text-accent transition-colors text-xs md:text-sm">{{ __('Lihat Detail') }}</span>
+                        
+                        <div class="mt-auto">
+                            <button class="detail-btn-activity w-full inline-flex items-center justify-center gap-2 py-3 rounded-lg font-bold text-xs uppercase tracking-wider shadow-sm transition-all duration-300">
+                                <span>{{ __('Lihat Detail') }}</span>
+                            </button>
                         </div>
                     </div>
                 </div>
                 @empty
-                <p class="col-span-full text-center text-light-text/70">{{ __('Belum ada aktivitas yang ditambahkan.') }}</p>
+                <div class="col-span-full text-center py-12">
+                    <div class="bg-white rounded-2xl shadow-soft p-8 max-w-md mx-auto border border-gray-100">
+                        <i data-lucide="calendar" class="w-12 h-12 mx-auto mb-4 text-[#1A3A24]/30"></i>
+                        <p class="text-[#1A3A24]/70">{{ __('Belum ada aktivitas yang ditambahkan.') }}</p>
+                    </div>
+                </div>
                 @endforelse
             </div>
         </div>
     </div>
 </section>
 
-{{-- HTML Modal (Statis) --}}
-<div id="activity-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 hidden opacity-0">
-    <div class="modal-content bg-dark-card w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl relative scale-95 opacity-0">
+{{-- MODAL YANG DIPERBAIKI & DIPERCANTIK --}}
+<div id="activity-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    
+    {{-- Tambahkan border tipis emas agar lebih premium --}}
+    <div class="modal-content bg-batik-modal w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl relative scale-95 opacity-0 transition-transform duration-300 border border-[#E6D793]/40">
         
-        {{-- =============================================== --}}
-        {{-- === INI ADALAH PERBAIKAN KONSISTENSI === --}}
-        {{-- (Kelas CSS disamakan dengan modal di halaman Produk) --}}
-        {{-- =============================================== --}}
-        <button class="close-modal absolute top-3 right-3 z-10 
-                       w-9 h-9 bg-white rounded-full 
-                       flex items-center justify-center 
-                       text-primary shadow-lg 
-                       hover:bg-gray-200 transition-colors">
-            <i data-lucide="x" class="w-6 h-6"></i>
+        {{-- Tombol Close dengan Border Putih --}}
+        <button class="close-modal absolute top-4 right-4 z-20 w-10 h-10 bg-[#1A3A24]/80 backdrop-blur-md rounded-full flex items-center justify-center text-[#E6D793] hover:bg-[#E6D793] hover:text-[#1A3A24] border-2 border-white/20 hover:scale-110 hover:rotate-90 transition-all shadow-lg">
+            <i data-lucide="x" class="w-5 h-5 font-bold"></i>
         </button>
-        {{-- =============================================== --}}
-        {{-- === AKHIR PERBAIKAN === --}}
-        {{-- =============================================== --}}
+        
+        {{-- Container Gambar --}}
+        <div class="relative w-full h-64 md:h-80 bg-gray-100">
+            {{-- Gambar dengan rounded-top agar pas dengan modal --}}
+            <img id="modal-image" src="" alt="Gambar" class="w-full h-full object-cover rounded-t-3xl">
+            
+            {{-- Gradasi Hitam di Bawah Gambar agar transisi ke teks mulus --}}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 rounded-t-3xl pointer-events-none"></div>
+        </div>
+        
+        {{-- Konten Teks --}}
+        <div class="p-6 md:p-10 relative">
+            {{-- Badge Kategori Kecil (Opsional, Pemanis) --}}
+            <span class="inline-block px-3 py-1 mb-3 text-[10px] tracking-widest font-bold uppercase text-[#1A3A24] bg-[#E6D793] rounded-full shadow-sm">
+                {{ __('Aktivitas') }}
+            </span>
 
-        <img id="modal-image" src="" alt="Gambar Aktivitas" class="w-full h-64 object-cover rounded-t-2xl">
-        <div class="p-6 md:p-8">
-            <h2 id="modal-title" class="text-2xl md:text-3xl font-serif font-bold text-accent mb-4"></h2>
-            <p id="modal-description" class="text-base text-light-text/80 leading-relaxed break-words"></p>
+            {{-- Judul Emas --}}
+            <h2 id="modal-title" class="text-2xl md:text-4xl font-serif font-bold text-[#1A3A24] mb-4 leading-tight"></h2>
+            
+            {{-- Garis Dekoratif --}}
+            <div class="w-16 h-1 bg-[#E6D793] rounded-full mb-6"></div>
+
+            {{-- Deskripsi Rata Kanan-Kiri --}}
+            <div id="modal-description" class="text-base text-[#1A3A24]/80 leading-relaxed text-justify space-y-4 font-light"></div>
         </div>
     </div>
 </div>
+
 @endsection
+
+@push('scripts')
+    {{-- Menambahkan library Lucide Icons dan menjalankannya --}}
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Memastikan ikon dirender setelah DOM siap
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+@endpush

@@ -24,12 +24,14 @@
 
     <?php echo $__env->make('partials.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-    
-    <a href="https://wa.me/6282232279783?text=<?php echo e(urlencode('Halo, saya tertarik dengan produk Djamoe.')); ?>"
-       target="_blank"
-       class="wa-bubble fixed bottom-6 right-6 z-50 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110">
-        <i data-lucide="message-circle" class="w-8 h-8"></i>
-    </a>
+   
+<a href="https://wa.me/6282232279783?text=<?php echo e(urlencode('Halo, saya tertarik dengan produk Djamoe.')); ?>"
+   target="_blank"
+   class="wa-bubble fixed bottom-6 right-6 z-50 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110">
+    <img src="https://img.icons8.com/?size=100&id=BkugfgmBwtEI&format=png&color=000000" 
+         alt="WhatsApp Logo" 
+         class="w-8 h-8" />
+</a>
     
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>

@@ -1,8 +1,240 @@
-/* 📁 resources/css/pages/aktivitas.css (File Baru) */
-#activity-modal {
-    transition: opacity 0.3s ease-in-out;
+/* =========================================
+   1. BASE UTILITIES (Warna dan Background)
+   ========================================= */
+
+/* A. Background Gelap (Hero) - Sama dengan Produk */
+.bg-elegant-activity {
+    background: linear-gradient(135deg, #1A3A24 0%, #0F2318 100%);
+    color: #FBF8ED;
+    position: relative;
+    z-index: 1;
 }
-#activity-modal .modal-content {
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+.bg-elegant-activity::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* PASTIKAN FILE INI ADA: public/gambar/bg-elegant.jpg */
+    background-image: url('/gambar/bg-elegant.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.2; 
+    mix-blend-mode: overlay; 
+    pointer-events: none;
+    z-index: -1;
 }
-/* Style .hidden (opacity-0, scale-95) sudah ditangani oleh kelas Tailwind di HTML */
+
+/* B. Background Terang (Konten) - Sama dengan Produk */
+.bg-mint-activity {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F7F4 100%);
+    position: relative;
+    z-index: 1;
+}
+
+.bg-mint-activity::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* PASTIKAN FILE INI ADA: public/gambar/bg-mint.png */
+    background-image: url('/gambar/bg-mint.png');
+    background-size: 400px auto; 
+    background-repeat: repeat;
+    opacity: 0.30; /* Sesuaikan agar tidak terlalu gelap/terang */
+    mix-blend-mode: multiply; 
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* =========================================
+   2. ORNAMEN & ANIMASI
+   ========================================= */
+
+.reveal-animation {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-animation.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.shadow-soft {
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 2px 4px -1px rgba(0, 0, 0, 0.03),
+        0 0 0 1px rgba(26, 58, 36, 0.05);
+}
+
+.animate-pulse-slow {
+    animation: pulseSlow 4s ease-in-out infinite;
+}
+
+@keyframes pulseSlow {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.2; transform: scale(1.1); }
+}
+
+/* Floating Ornaments (Sama dengan Produk) */
+.floating-ornament {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(230, 215, 147, 0.08), rgba(26, 58, 36, 0.04));
+    animation: float 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.ornament-1 { width: 400px; height: 400px; top: -200px; right: -150px; animation-delay: 0s; }
+.ornament-2 { width: 300px; height: 300px; bottom: -150px; left: -100px; animation-delay: 3s; }
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
+}
+
+/* =========================================
+   3. ACTIVITY CARD (FIXED & ENHANCED)
+   ========================================= */
+
+.activity-card {
+    background: #FFFFFF;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    border: 1px solid rgba(26, 58, 36, 0.05);
+    transform-style: preserve-3d;
+    overflow: hidden; /* Penting agar isi tidak keluar */
+}
+
+/* --- HOVER EFFECT (Card Berubah Hijau) --- */
+.activity-card:hover {
+    /* Background Card jadi Hijau Tua */
+    background: linear-gradient(135deg, #1A3A24 0%, #0F2318 100%);
+    transform: translateY(-8px);
+    border-color: rgba(230, 215, 147, 0.5);
+    box-shadow: 0 20px 40px -12px rgba(26, 58, 36, 0.3);
+}
+
+/* --- PENTING: PERBAIKAN BUG WARNA TIDAK MUNCUL --- */
+/* Masalahnya: Di HTML ada class 'bg-white' yang menutupi background hijau card. */
+/* Solusi: Saat di-hover, kita paksa background inner (isi) jadi transparan */
+.activity-card:hover .bg-white {
+    background: transparent !important;
+    transition: background 0.3s ease;
+}
+
+/* --- TEXT COLOR ADJUSTMENT --- */
+/* Karena background jadi hijau gelap, teks harus jadi terang */
+
+/* Judul jadi Emas */
+.activity-card:hover h3,
+.activity-card:hover .activity-title {
+    color: #E6D793 !important;
+}
+
+/* Deskripsi jadi Putih Gading */
+.activity-card:hover p {
+    color: rgba(251, 248, 237, 0.9) !important;
+}
+
+/* --- DETAIL BUTTON --- */
+.detail-btn-activity {
+    background: linear-gradient(135deg, #F2F7F5 0%, #E8F4EE 100%);
+    color: #1A3A24;
+    border: 1px solid rgba(26, 58, 36, 0.1);
+    transition: all 0.3s ease;
+}
+
+/* Saat Card Hijau, Tombol jadi Emas (Agar terlihat kontras) */
+.activity-card:hover .detail-btn-activity {
+    background: linear-gradient(135deg, #E6D793 0%, #D4C078 100%);
+    color: #1A3A24; /* Teks tombol gelap */
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.activity-card:hover .detail-btn-activity span {
+    transform: translateX(-2px);
+}
+/* =========================================
+   4. CARD WAWASAN (DARK GREEN)
+   ========================================= */
+
+.bg-dark-card-activity {
+    background: #1A3A24;
+    border: 1px solid rgba(230, 215, 147, 0.2);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efek Shimmer Halus di Background Card */
+.bg-dark-card-activity::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(230, 215, 147, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+/* =========================================
+   5. MODAL BATIK STYLE
+   ========================================= */
+
+.bg-batik-modal {
+    background-color: #FFFFFF; /* Warna dasar putih */
+    position: relative;
+    z-index: 1;
+}
+
+.bg-batik-modal::before {
+    content: '';
+    position: absolute;
+    /* Pastikan motif menutupi seluruh area scroll */
+    top: 0; left: 0; right: 0; min-height: 100%;
+    
+    /* Gunakan gambar batik terang */
+    background-image: url('/gambar/bg-mint.png');
+    background-size: 350px auto;
+    background-repeat: repeat;
+    
+    /* Opacity disesuaikan agar teks modal tetap mudah dibaca */
+    opacity: 0.15; 
+    mix-blend-mode: multiply;
+    
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* =========================================
+   6. MODAL ENHANCEMENTS (TAMBAHAN)
+   ========================================= */
+
+/* A. Custom Scrollbar (Elegan) */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background-color: rgba(26, 58, 36, 0.3);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(230, 215, 147, 0.7);
+}
+
+/* B. Deskripsi Modal (Menjaga Format Paragraf) */
+#modal-description {
+    white-space: pre-wrap; /* Ini akan menjaga line break dari database */
+    word-break: break-word; /* Mencegah teks panjang meluber */
+}

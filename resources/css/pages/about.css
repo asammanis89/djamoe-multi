@@ -1,58 +1,477 @@
-/* 📁 resources/css/pages/about.css (File Baru) */
-/* Style ini menimpa font global 'Inter' khusus di halaman 'about' */
-body {
-    font-family: 'DM Sans', sans-serif;
-    color: #e6e2d3;
+/* =========================================
+   1. BASE UTILITIES & BACKGROUNDS (FINAL VERSION)
+   ========================================= */
+
+/* A. BACKGROUND TERANG (Floral Pattern) 
+   Cocok untuk: Section Produk, Testimoni */
+.bg-mint {
+    /* Warna dasar gradasi putih ke hijau sangat muda */
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F7F4 100%);
+    position: relative;
+    z-index: 1; /* Penting agar konten di atas background */
 }
-h1, h2, h3, h4 {
-    font-family: 'DM Serif Display', serif;
-    color: #d9b26f;
-    font-variant-numeric: lining-nums; 
+
+.bg-mint::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    
+    /* Memuat gambar bg-mint.png Anda */
+    background-image: url('/gambar/bg-mint.png');
+    
+    /* Ukuran pattern (sesuaikan angka ini jika ingin motif lebih besar/kecil) */
+    background-size: 400px auto; 
+    background-repeat: repeat;
+    
+    /* PENTING: Opacity rendah agar teks hitam tetap terbaca */
+    opacity: 0.25; 
+    
+    /* Blend mode agar warna hijaunya menyatu halus dengan background putih */
+    mix-blend-mode: multiply; 
+    
+    pointer-events: none;
+    z-index: -1; /* Taruh di belakang konten */
 }
-p, span {
-    font-family: 'DM Sans', sans-serif;
-    font-variant-numeric: lining-nums;
+
+/* B. BACKGROUND GELAP (Gold Lines Luxury)
+   Cocok untuk: Hero Section, Partner, Footer */
+.bg-elegant {
+    /* Warna dasar hijau tua D'jamoe */
+    background: linear-gradient(135deg, #1A3A24 0%, #0F2318 100%);
+    color: #FBF8ED;
+    position: relative;
+    z-index: 1;
 }
-/* Animasi 'reveal' ini duplikat dari app.css, sebaiknya dihapus dari sini */
+
+.bg-elegant::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    
+    /* Memuat gambar bg-elegant.jpg Anda */
+    background-image: url('/gambar/bg-elegant.jpg');
+    
+    /* Karena ini terlihat seperti wallpaper besar, gunakan cover */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* Opacity rendah supaya garis emasnya terlihat "samar-samar mewah" 
+       dan tidak mengganggu teks putih/emas di depannya */
+    opacity: 0.2; 
+    
+    /* Blend mode agar hitam di gambar menyatu dengan hijau tua */
+    mix-blend-mode: overlay; 
+    
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Tambahan: Pastikan di Mobile pattern elegant tetap bagus */
+@media (max-width: 768px) {
+    .bg-elegant::before {
+        /* Di HP mungkin pattern perlu diulang agar tidak pecah */
+        background-size: 500px auto; 
+        background-repeat: repeat;
+    }
+}
+
+/* =========================================
+   2. REVEAL ANIMATION
+   ========================================= */
+
 .reveal-animation {
     opacity: 0;
     transform: translateY(40px);
-    animation: fadeUp 1s ease forwards;
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
-@keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
+
+.reveal-animation.active {
+    opacity: 1;
+    transform: translateY(0);
 }
-.card-container {
-    perspective: 1000px;
+
+.animate-fadeIn {
+    animation: fadeIn 0.8s ease-in-out;
 }
-.spice-card {
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* =========================================
+   3. ACTIVITY CARD (Premium Design)
+   ========================================= */
+
+.activity-card {
+    background: linear-gradient(135deg, #1A3A24 0%, #0F2318 100%);
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    border: 1px solid rgba(230, 215, 147, 0.15);
+    overflow: hidden;
     transform-style: preserve-3d;
 }
-.card-container:hover .spice-card {
-    transform: rotateY(10deg) rotateX(10deg) translateZ(20px);
-    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.3);
+
+.activity-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(230, 215, 147, 0.04) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    opacity: 0.4;
 }
-img {
-    border-radius: 1.25rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-    transition: transform 0.6s ease, box-shadow 0.6s ease;
+
+/* Shimmer Effect */
+.activity-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(230, 215, 147, 0.15), transparent 50%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
 }
-img:hover {
-    transform: scale(1.02);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+
+.activity-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 
+        0 30px 60px -15px rgba(26, 58, 36, 0.6),
+        0 0 0 1px rgba(230, 215, 147, 0.4);
+    border-color: rgba(230, 215, 147, 0.4);
 }
-/* Kelas warna ini sudah ada di tailwind.config.js, jadi ini duplikat */
-.text-accent { color: #d9b26f; }
-.bg-dark-bg { background-color: #13231a; }
-.bg-dark-card { background-color: #11221a; }
-.text-light-text { color: #e6e2d3; }
+
+.activity-card:hover::after {
+    opacity: 1;
+}
+
+/* =========================================
+   4. STORY IMAGE STYLING
+   ========================================= */
+
+.story-image-wrapper-full {
+    position: relative;
+    overflow: hidden;
+    min-height: 450px;
+}
+
+.story-image-wrapper-full::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(26, 58, 36, 0.2), transparent);
+    pointer-events: none;
+}
+
+.story-image-wrapper-full img {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.activity-card:hover .story-image-wrapper-full img {
+    transform: scale(1.08);
+}
+
+/* =========================================
+   5. SPICE CARD GREEN VARIANT
+   ========================================= */
+
+.spice-card-container {
+    perspective: 1000px;
+}
+
+.spice-card-green {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    border: 1px solid rgba(230, 215, 147, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    min-height: 240px;
+    transform-style: preserve-3d;
+}
+
+.spice-card-green::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(230, 215, 147, 0.03), transparent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* Shimmer Effect */
+.spice-card-green::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(230, 215, 147, 0.15) 50%,
+        transparent 70%
+    );
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    transition: transform 0.8s ease;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* State Hover: Berubah menjadi Putih */
+.spice-card-green:hover {
+    background-color: #FFFFFF;
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 50px -10px rgba(230, 215, 147, 0.4);
+    border-color: #E6D793;
+}
+
+.spice-card-green:hover::before {
+    opacity: 1;
+}
+
+.spice-card-green:hover::after {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+}
+
+/* Typography Changes on Hover */
+.spice-card-green h3 { 
+    color: #E6D793; 
+    transition: color 0.4s ease;
+    font-weight: 700;
+    position: relative;
+    z-index: 10;
+}
+
+.spice-card-green:hover h3 { 
+    color: #1A3A24;
+}
+
+.spice-card-green .text-content-green { 
+    color: #FBF8ED;
+    opacity: 0.85;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 10;
+}
+
+.spice-card-green:hover .text-content-green { 
+    color: #4B5563;
+    opacity: 1;
+}
+
+/* Icon Styling */
+.spice-card-green .icon-wrapper-green {
+    background-color: rgba(230, 215, 147, 0.18);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    color: #E6D793;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border: 1.5px solid rgba(230, 215, 147, 0.25);
+    position: relative;
+    z-index: 10;
+}
+
+.spice-card-green:hover .icon-wrapper-green {
+    background-color: #1A3A24;
+    color: #E6D793;
+    transform: scale(1.15) rotate(5deg);
+    border-color: #E6D793;
+    box-shadow: 0 8px 20px rgba(26, 58, 36, 0.3);
+}
+
+/* =========================================
+   6. BUTTON CTA STYLING
+   ========================================= */
+
+.btn-cta {
+    background-color: #1A3A24;
+    color: #FFFFFF;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    box-shadow: 0 8px 20px rgba(26, 58, 36, 0.25);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #E6D793 0%, #D4C078 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.btn-cta:hover {
+    color: #1A3A24;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(230, 215, 147, 0.5);
+    border-color: #E6D793;
+}
+
+.btn-cta:hover::before {
+    opacity: 1;
+}
+
+.btn-cta:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* =========================================
+   7. TYPOGRAPHY ENHANCEMENT
+   ========================================= */
+
+body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1A3A24;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    color: #1A3A24;
+    font-variant-numeric: lining-nums;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+}
+
 p {
     line-height: 1.8;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.01em;
 }
+
+/* =========================================
+   8. RESPONSIVE ADJUSTMENTS
+   ========================================= */
+
 @media (max-width: 768px) {
-    h1 { font-size: 2.5rem; }
-    h2 { font-size: 2rem; }
-    h3 { font-size: 1.5rem; }
+    .story-image-wrapper-full {
+        min-height: 320px;
+    }
+    
+    .spice-card-green {
+        padding: 1.5rem;
+        min-height: 200px;
+    }
+    
+    .spice-card-green:hover {
+        transform: translateY(-6px) scale(1.01);
+    }
+    
+    .activity-card {
+        border-radius: 1.5rem;
+    }
+    
+    .activity-card:hover {
+        transform: translateY(-8px);
+    }
+    
+    .pattern-dots {
+        background-size: 15px 15px;
+    }
 }
+
+@media (min-width: 1024px) {
+    .story-image-wrapper-full {
+        min-height: 500px;
+    }
+}
+
+/* =========================================
+   9. LUCIDE ICONS ENHANCEMENT
+   ========================================= */
+
+[data-lucide] {
+    stroke-width: 1.8;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.4s ease;
+}
+
+.spice-card-green:hover [data-lucide] {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+/* =========================================
+   10. SMOOTH SCROLLING
+   ========================================= */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* =========================================
+   11. SELECTION STYLING
+   ========================================= */
+
+::selection {
+    background-color: #E6D793;
+    color: #1A3A24;
+}
+
+/* =========================================
+   12. Z-INDEX MANAGEMENT
+   ========================================= */
+
+.bg-mint > * {
+    position: relative;
+    z-index: 10;
+}
+
+/* =========================================
+   13. PERFORMANCE OPTIMIZATIONS
+   ========================================= */
+
+.activity-card,
+.spice-card-green,
+.btn-cta {
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   14. REDUCED MOTION SUPPORT
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* =========================================
+   15. FORCE NO BLUR (Matching Produk)
+   ========================================= */
+
+.activity-card,
+.spice-card-green,
+.story-image-wrapper-full {
+    backdrop-filter: none !important;
+    filter: none !important;
+}
+
+/* =========================================
+   16. CONTAINER STYLING
+   ========================================= */
+
+.container {
+    max-width: 1280px;
+}
+
+/* =========================================
+   17. LOADING STATE FOR IMAGES
+   ========================================= */
+
+img {
+    background-color: rgba(26, 58, 36, 0.05);
+}
+

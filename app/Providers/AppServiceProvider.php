@@ -23,9 +23,9 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-        // --- INI KODE PENTINGNYA ---
-        // Kita paksa website pakai HTTPS agar Cloudflare tidak error Mixed Content
+{
+    if (app()->environment('production')) {
         URL::forceScheme('https');
     }
+}
 }
