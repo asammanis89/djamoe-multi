@@ -21,3 +21,6 @@ yarn-error.log
 /storage/logs/*.log
 /storage/framework/sessions/*
 !/storage/logs/.gitignore
+/storage/framework/views/*.php
+/storage/framework/cache/data/*
+/storage/app/public/*
