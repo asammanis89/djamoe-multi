@@ -1,8 +1,21 @@
+![banner](docs/banner.png)
+
 # Djamoe Multi – Website Company Profile Dwibahasa + Dashboard Admin
 
 Website company profile **dua bahasa (Indonesia / English)** dengan **dashboard admin** untuk mengelola seluruh konten tanpa menyentuh kode. Dibangun dengan Laravel untuk klien UMKM.
 
-> 📷 Screenshot: tambahkan `docs/home.png`, `docs/produk.png`, `docs/admin-dashboard.png` lalu tampilkan di sini dengan `![Beranda](docs/home.png)`.
+![Beranda](docs/dj_home_id.jpg)
+*Beranda (Bahasa Indonesia)*
+
+| English | Katalog produk |
+|---|---|
+| ![Home EN](docs/dj_home_en.jpg) | ![Produk](docs/dj_produk.jpg) |
+
+| Dashboard admin | Kelola produk |
+|---|---|
+| ![Dashboard](docs/dj_admin.jpg) | ![Kelola produk](docs/dj_admin_produk.jpg) |
+
+<sub>Screenshot dari instalasi lokal dengan data contoh.</sub>
 
 ## Fitur
 
