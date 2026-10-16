@@ -18,6 +18,7 @@ class SuperAdminSeeder extends Seeder
         if (DB::table('users')->where('email', 'superadmin@kreasilokal.com')->doesntExist()) {
             DB::table('users')->insert([
                 'name' => 'Super Admin',
+                'username' => 'superadmin',
                 'email' => 'superadmin@kreasilokal.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('super123'), // 🔑 password: super123
