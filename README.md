@@ -19,7 +19,7 @@ Website company profile **dua bahasa (Indonesia / English)** dengan **dashboard 
 
 ## Fitur
 
-- **Dwibahasa ID/EN** – pengalih bahasa di setiap halaman (`mcamara/laravel-localization` + `spatie/laravel-translatable`).
+- Dwibahasa ID/EN: pengalih bahasa di setiap halaman (`mcamara/laravel-localization` + `spatie/laravel-translatable`).
 - **Dashboard admin** (AdminLTE) untuk mengelola: kategori, produk, lokasi/outlet, artikel/aktivitas, halaman "Tentang Kami", dan flyer.
 - **Manajemen pengguna** dengan dua peran (`admin` dan `superadmin`); superadmin dapat menonaktifkan/mengaktifkan akun.
 - **Halaman publik:** beranda, produk (per kategori + detail), aktivitas, outlet, tentang kami.
@@ -51,7 +51,7 @@ php artisan serve
 
 Buka `http://localhost:8000`, login admin di `/login`.
 
-> ⚠️ Segera **ganti password akun superadmin bawaan seeder** setelah login pertama. Jangan pernah meng-commit file `.env` maupun `storage/logs/`.
+> Catatan: Segera **ganti password akun superadmin bawaan seeder** setelah login pertama. Jangan pernah meng-commit file `.env` maupun `storage/logs/`.
 
 ## Struktur singkat
 
@@ -62,7 +62,6 @@ routes/web.php                # rute publik (berlokalisasi) + rute admin (role-b
 resources/views/              # tampilan publik + admin
 ```
 
-## Pengembang
+---
 
-**Ardha Febrian Muqorrobin** – Web Developer & Linux VPS Specialist
-WhatsApp 081217529861 · [LinkedIn](https://www.linkedin.com/in/ardha-febrian-342317289/)
+Dibuat oleh Ardha Febrian. Portofolio dan kontak: [asammanis89.github.io](https://asammanis89.github.io), WhatsApp [0857-5517-1491](https://wa.me/6285755171491).
